@@ -70,7 +70,6 @@ public class NdefActivityHelper {
 			else if(tagtype.equals("MifareUltralight")){
 				if(listener!=null)
 					listener.read(NFCDataUtils.readMifareUltralightDataByPage(tag, 8));
-//					listener.read(NFCDataUtils.readMifareUltralightData(tag));
 			}
 
 		//当读到一个ACTION_NDEF_DISCOVERED数据
