@@ -1,15 +1,14 @@
 package com.bsu.bakerstreet42.tools;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import android.content.Intent;
 import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareClassic;
 import android.nfc.tech.MifareUltralight;
-import android.nfc.tech.NdefFormatable;
 import android.os.Parcelable;
 
 /**
@@ -189,25 +188,54 @@ public class NFCDataUtils {
 	}
 	
 	public static void writeMifareClassesData(Tag tag){
-		NdefFormatable ndeff = NdefFormatable.get(tag);
-		Locale locale = Locale.US;
+//		NdefFormatable ndeff = NdefFormatable.get(tag);
+//		Locale locale = Locale.US;
 		
 	}
 	/**
-	 * 读取ndef数据，未完成
-	 * @param intent	意图对象，通过意图对象获得数据
-	 * @return	
+	 * 读取ndef数据
+	 * @param intent	通过意图对象获得数据
+	 * @return			返回单条数据
 	 */
 	public static String readNdefData(Intent intent){
-		NdefMessage[] msgs;
-		Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-		if(rawMsgs!=null){
-			msgs = new NdefMessage[rawMsgs.length];
-			for(int i=0;i<rawMsgs.length;i++){
-				msgs[i] = (NdefMessage)rawMsgs[i];
+		String mTagText = "";
+		// 判断是否为ACTION_NDEF_DISCOVERED
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+			// 从标签读取数据（Parcelable对象）
+			Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+
+			NdefMessage msgs[] = null;
+			int contentSize = 0;
+			if (rawMsgs != null) {
+				msgs = new NdefMessage[rawMsgs.length];
+				// 标签可能存储了多个NdefMessage对象，一般情况下只有一个NdefMessage对象
+				for (int i = 0; i < rawMsgs.length; i++) {
+					// 转换成NdefMessage对象
+					msgs[i] = (NdefMessage) rawMsgs[i];
+					// 计算数据的总长度
+					contentSize += msgs[i].toByteArray().length;
+				}
+			}
+			try {
+//				System.out.println("=============try "+msgs[0].toString());
+				if (msgs != null) {
+					// 程序中只考虑了1个NdefRecord对象，若是通用软件应该考虑所有的NdefRecord对象
+					NdefRecord record = msgs[0].getRecords()[0];
+					// 分析第1个NdefRecorder，并创建TextRecord对象
+					TextRecord textRecord = TextRecord.parse(record);
+					// 获取实际的数据占用的大小，并显示在窗口上
+					mTagText += textRecord.getText() + "\n\n纯文本\n"+ contentSize + " bytes";
+					System.out.println("==========="+textRecord.getText());
+//					tv.setText(mTagText);
+					return textRecord.getText();
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+//				tv.setText(e.getMessage());
 			}
 		}
-		return "";
+		return null;
 	}
 	
 	public static void writeNdefData(){
