@@ -4,6 +4,6 @@ package com.bsu.bakerstreet42.listener;
  * @author fengchong
  *
  */
-public interface OnNdefReadListener {
+public interface OnNfcReadListener {
 	public void read(String data);
 }

@@ -1,13 +1,9 @@
 package com.bsu.bakerstreet42.tools;
 
-import com.bsu.bakerstreet42.listener.OnNdefReadListener;
-import com.bsu.promevideo.tools.NFCDataUtils;
-
+import com.bsu.bakerstreet42.listener.OnNfcReadListener;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentFilter.MalformedMimeTypeException;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 /**
@@ -15,13 +11,13 @@ import android.nfc.Tag;
  * @author fengchong
  *
  */
-public class NdefActivityHelper {
+public class NfcActivityHelper {
 	private Activity activity;				//要操作的Activity
 	private NfcAdapter adapter;				//Nfc设备代理
 	private PendingIntent pintent;			//意图对象
-	private OnNdefReadListener listener;	//读取操作的监听器
+	private OnNfcReadListener listener;	//读取操作的监听器
 
-	public NdefActivityHelper(Activity a,NfcAdapter nfca,PendingIntent pi){
+	public NfcActivityHelper(Activity a,NfcAdapter nfca,PendingIntent pi){
 		activity = a;
 		adapter = nfca;
 		pintent = pi;
@@ -31,6 +27,7 @@ public class NdefActivityHelper {
 	 * 用于Activity的onCreate执行
 	 */
 	public void onCreate(){
+		
 	}
 	/**
 	 * 用于在Activity中的onResume里执行
@@ -50,7 +47,7 @@ public class NdefActivityHelper {
 	 * 设置读取nfc数据的监听器
 	 * @param l
 	 */
-	public void setOnNFCReadListener(OnNdefReadListener l){
+	public void setOnNFCReadListener(OnNfcReadListener l){
 		listener = l;
 	}
 	
@@ -72,9 +69,10 @@ public class NdefActivityHelper {
 					listener.read(NFCDataUtils.readMifareUltralightDataByPage(tag, 8));
 			}
 
-		//当读到一个ACTION_NDEF_DISCOVERED数据
+		//当读到一个ACTION_NDEF_DISCOVERED数据,返回ndef数据
 		}else if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())){
-			
+			if(listener!=null)
+				listener.read(NFCDataUtils.readNdefData(intent));
 		}
 	}
 }
