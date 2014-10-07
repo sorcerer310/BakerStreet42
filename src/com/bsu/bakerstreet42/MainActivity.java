@@ -13,6 +13,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,10 @@ public class MainActivity extends Activity {
 	
 	//视频音频资源路径
 	private String vpath;
+	
+	//nfc帮助类Handler
+	private NfcHelperHandler nfchandler;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,6 +49,15 @@ public class MainActivity extends Activity {
 		adapter = NfcAdapter.getDefaultAdapter(this);
 		//截获Intent,使用当前的Activity
 		pintent = PendingIntent.getActivity(this, 0, new Intent(this,getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+		
+		initNfcHelper();
+		initMessage();
+	}
+	/*
+	 * 初始化NfcHelper
+	 */
+	private void initNfcHelper(){
+		nfchandler = new NfcHelperHandler(this);
 		//初始化nfc数据帮助类
 		nfchelper = new NfcActivityHelper(this,adapter,pintent);
 		nfchelper.onCreate();
@@ -50,36 +65,40 @@ public class MainActivity extends Activity {
 		nfchelper.setOnNFCReadListener(new OnNfcReadListener(){
 			@Override
 			public void read(String data) {
-				System.out.println("=============data");
-//				if(data.equals("bk42-lr002")){
-					Map map = new HashMap<String,Object>();
-					map.put("id", "bk42-lr001");
-					map.put("title","序章");
-					map.put("path", R.raw.v001);
-					listdata.add(map);
-//				}else if(data.equals("bk42-lr003")){
-//					Map map = new HashMap<String,Object>();
-//					map.put("id", data);
-//					map.put("content", "视频3");
-//					map.put("image", R.drawable.msg);
-//					list.add(map);
-//				}else if(data.equals("bk42-lr004")){
-//					Map map = new HashMap<String,Object>();
-//					map.put("id", data);
-//					map.put("content", "视频4");
-//					map.put("image", R.drawable.msg);
-//					list.add(map);
-//				}
-			}});
-
-		initMessage();
+				Bundle bundle = new Bundle();
+				Message msg = new Message();
+				if(data.equals("bk42-lr002")){
+					bundle.putString("id", "bk42-lr002");
+					bundle.putString("title","002");
+					bundle.putInt("cpath", R.raw.c001);
+					bundle.putInt("vpath", R.raw.r001);
+					msg.setData(bundle);
+					MainActivity.this.nfchandler.sendMessage(msg);
+				}else if(data.equals("bk42-lr003")){
+					bundle.putString("id", "bk42-lr003");
+					bundle.putString("title","003");
+					bundle.putInt("cpath", R.raw.c001);
+					bundle.putInt("vpath", R.raw.r001);
+					msg.setData(bundle);
+					MainActivity.this.nfchandler.sendMessage(msg);
+				}else if(data.equals("bk42-lr004")){
+					bundle.putString("id", "bk42-lr004");
+					bundle.putString("title","004");
+					bundle.putInt("cpath", R.raw.c001);
+					bundle.putInt("vpath", R.raw.r001);
+					msg.setData(bundle);
+					MainActivity.this.nfchandler.sendMessage(msg);
+				}
+			}});	
 	}
+	
 	/**
 	 * 初始化收件箱消息部分
 	 */
 	private void initMessage(){
 		lv_message = (ListView) findViewById(R.id.lv_message);
-		listdata = new ArrayList<Map<String,Object>>();
+		if(listdata==null){
+			listdata = new ArrayList<Map<String,Object>>();
 		//增加序章数据
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("id", "bk42-lr001");
@@ -105,6 +124,7 @@ public class MainActivity extends Activity {
 				intent.putExtra("vpath", vpath+((int)mapitem.get("vpath")));		//传送播放路径到下一个界面
 				MainActivity.this.startActivity(intent);
 			}});
+		}
 	}
 	
 	@Override
@@ -136,5 +156,40 @@ public class MainActivity extends Activity {
 		if (KeyEvent.KEYCODE_HOME == keyCode)
 			return true;
 		return super.onKeyDown(keyCode, event);
+	}
+	/**
+	 * 操作nfchelper
+	 * @author fengchong
+	 *
+	 */
+	public class NfcHelperHandler extends Handler{
+		private MainActivity me;
+		public NfcHelperHandler(MainActivity m){
+			me = m;
+		}
+		@Override
+		public void handleMessage(Message msg){
+			boolean additem = true;							//默认增加数据标示为true
+			
+			Bundle bundle = msg.getData();					//获得handle传送过来得消息
+			String id = bundle.getString("id");				//获得要增加的项目的id
+			//遍历所有的list项目如果该项目已存在，设置增加数据的标识为false
+			for(Map<String,Object> m:me.listdata){			
+				if(m.get("id").toString().equals(id)){
+					additem = false;
+					break;
+				}
+			}
+			//增加数据
+			if(additem){
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("id", bundle.getString("id"));
+				map.put("title",bundle.getString("title"));
+				map.put("cpath", bundle.getString("cpath"));
+				map.put("vpath", bundle.getString("vpath"));
+				me.listdata.add(map);
+				me.sa.notifyDataSetChanged();
+			}
+		}
 	}
 }
