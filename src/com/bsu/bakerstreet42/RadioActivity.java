@@ -11,15 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-public class VideoActivity extends Activity {
+public class RadioActivity extends Activity {
 	private VideoView vv;
 	private MediaController mc;
 	private TextView tv;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_video);
+		setContentView(R.layout.activity_radio);
 		
 		Intent intent = this.getIntent();
 		String vpath = intent.getStringExtra("vpath");
