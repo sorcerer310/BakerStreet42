@@ -26,7 +26,12 @@
         </activity>
         <activity
             android:name=".VideoActivity"
-            android:label="@string/title_activity_video" >
+            android:label="@string/title_activity_video"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".RadioActivity"
+            android:label="@string/title_activity_radio" >
         </activity>
     </application>
 

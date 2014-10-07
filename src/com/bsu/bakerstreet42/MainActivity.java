@@ -13,6 +13,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,11 +52,11 @@ public class MainActivity extends Activity {
 			public void read(String data) {
 				System.out.println("=============data");
 //				if(data.equals("bk42-lr002")){
-//					Map map = new HashMap<String,Object>();
-//					map.put("id", data);
-//					map.put("content", "视频2");
-//					map.put("image", R.drawable.msg);
-//					list.add(map);
+					Map map = new HashMap<String,Object>();
+					map.put("id", "bk42-lr001");
+					map.put("title","序章");
+					map.put("path", R.raw.v001);
+					listdata.add(map);
 //				}else if(data.equals("bk42-lr003")){
 //					Map map = new HashMap<String,Object>();
 //					map.put("id", data);
@@ -83,7 +84,8 @@ public class MainActivity extends Activity {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("id", "bk42-lr001");
 		map.put("title","序章");
-		map.put("path", R.raw.v001);
+		map.put("cpath", R.raw.c001);
+		map.put("vpath", R.raw.r001);
 		listdata.add(map);
 		
 		sa = new SimpleAdapter(this,listdata,R.layout.listitem
@@ -91,15 +93,17 @@ public class MainActivity extends Activity {
 				,new int[]{R.id.item_title});
 		
 		lv_message.setAdapter(sa);
-		vpath = "android.resource://com.bsu.bakerstreet42";
+		vpath = "android.resource://com.bsu.bakerstreet42/";
 		
 		lv_message.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> l, View v, int position,long id) {
-				Intent intent = new Intent();
+				Intent intent = new Intent(MainActivity.this,RadioActivity.class);
 				Map<String,Object> mapitem = listdata.get(position);
 				intent.putExtra("title", mapitem.get("title").toString());			//传送标题到下一个界面
-				intent.putExtra("vpath", vpath+((int)mapitem.get("path")));			//传送播放路径到下一个界面
+				intent.putExtra("cpath", (int)mapitem.get("cpath"));				//歌词路径 
+				intent.putExtra("vpath", vpath+((int)mapitem.get("vpath")));		//传送播放路径到下一个界面
+				MainActivity.this.startActivity(intent);
 			}});
 	}
 	
@@ -122,5 +126,15 @@ public class MainActivity extends Activity {
 		nfchelper.onResume();
 	}
 	
-	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		//解惑back键
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			return true;
+		}
+
+		if (KeyEvent.KEYCODE_HOME == keyCode)
+			return true;
+		return super.onKeyDown(keyCode, event);
+	}
 }

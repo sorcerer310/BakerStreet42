@@ -28,7 +28,7 @@
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="232dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_videotitle" >
 
@@ -40,7 +40,7 @@
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="fill_parent"
-                android:layout_height="232dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
