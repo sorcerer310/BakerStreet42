@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("id", "bk42-lr001");
 		map.put("title","序章");
-		map.put("cpath", R.raw.c001);
+		map.put("cpath", R.raw.l001);
 		map.put("vpath", R.raw.r001);
 		listdata.add(map);
 		

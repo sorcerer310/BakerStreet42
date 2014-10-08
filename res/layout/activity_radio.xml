@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lrc="http://schemas.android.com/apk/res/com.bsu.bakerstreet42"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,18 +34,34 @@
         android:layout_below="@+id/tv_videotitle" >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:orientation="vertical" >
 
-            <TextView
+            <com.bsu.bakerstreet42.lrc.LrcView
+                android:id="@+id/lrc"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="@android:color/white" 
+                                
+                lrc:currentTextColor="@android:color/holo_orange_light"
+    			lrc:normalTextColor="@android:color/black"
+    			lrc:rows="7"
+    			lrc:textSize="20sp"
+    			lrc:dividerHeight="10dip"
+                
+                >
+                </com.bsu.bakerstreet42.lrc.LrcView>
+
+            <!--
+                 <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-
+            -->
         </LinearLayout>
     </ScrollView>
 
