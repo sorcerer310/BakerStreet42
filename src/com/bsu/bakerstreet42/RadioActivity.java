@@ -14,6 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,7 @@ public class RadioActivity extends Activity {
 	private TextView tv;
 	private TextView tv_content;
 	private LrcView lrc;
+	private Button bt_back;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,6 +46,14 @@ public class RadioActivity extends Activity {
 		mc.show(0);											//让控制条一直显示
 		tv = (TextView) findViewById(R.id.tv_videotitle);
 		tv.setText(title);
+
+		bt_back = (Button) findViewById(R.id.bt_back);
+		bt_back.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View arg0) {
+				finish();
+			}
+		});
 		
 //		tv_content = (TextView)findViewById(R.id.tv_content);
 //		tv_content.setText(Utils.getString(this.getResources().openRawResource(cpath)));
@@ -50,10 +62,6 @@ public class RadioActivity extends Activity {
 			//测试滚动歌词控件
 			lrc = (LrcView) findViewById(R.id.lrc);
 			lrc.setLrcPath(this.getResources().openRawResource(lrcpath));
-			
-			
-			
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
