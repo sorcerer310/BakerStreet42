@@ -66,8 +66,17 @@
     <VideoView
         android:id="@+id/vv"
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
+        android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/scrollView1" />
+
+    <Button
+        android:id="@+id/bt_back"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="返回" />
 
 </RelativeLayout>
