@@ -30,10 +30,11 @@ public class RadioActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_radio);
 		
+		//通过意图对象获得要显示的标题，歌词文件资源，ogg声音文件路径
 		Intent intent = this.getIntent();
 		String title = intent.getStringExtra("title");
-		int cpath = intent.getIntExtra("cpath", 0);
-		String vpath = intent.getStringExtra("vpath");
+		int lrcpath = intent.getIntExtra("lrcpath", 0);
+		String oggpath = intent.getStringExtra("oggpath");
 		Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
 		
 		vv = (VideoView) findViewById(R.id.vv);
@@ -48,7 +49,7 @@ public class RadioActivity extends Activity {
 		try {
 			//测试滚动歌词控件
 			lrc = (LrcView) findViewById(R.id.lrc);
-			lrc.setLrcPath(this.getResources().openRawResource(cpath));
+			lrc.setLrcPath(this.getResources().openRawResource(lrcpath));
 			
 			
 			
@@ -87,7 +88,7 @@ public class RadioActivity extends Activity {
 
 		
 		vv.setMediaController(mc);
-		vv.setVideoURI(Uri.parse(vpath));
+		vv.setVideoURI(Uri.parse(oggpath));
 		vv.requestFocus();
 //		vv.start();
 	}

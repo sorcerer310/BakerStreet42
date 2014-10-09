@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.bsu.bakerstreet42.listener.OnNfcReadListener;
 import com.bsu.bakerstreet42.tools.NfcActivityHelper;
+import com.bsu.bakerstreet42.tools.Utils;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -70,22 +71,22 @@ public class MainActivity extends Activity {
 				if(data.equals("bk42-lr002")){
 					bundle.putString("id", "bk42-lr002");
 					bundle.putString("title","002");
-					bundle.putInt("cpath", R.raw.c001);
-					bundle.putInt("vpath", R.raw.r001);
+					bundle.putInt("lrcpath", R.raw.c001);
+					bundle.putInt("oggpath", R.raw.r001);
 					msg.setData(bundle);
 					MainActivity.this.nfchandler.sendMessage(msg);
 				}else if(data.equals("bk42-lr003")){
 					bundle.putString("id", "bk42-lr003");
 					bundle.putString("title","003");
-					bundle.putInt("cpath", R.raw.c001);
-					bundle.putInt("vpath", R.raw.r001);
+					bundle.putInt("lrcpath", R.raw.c001);
+					bundle.putInt("oggpath", R.raw.r001);
 					msg.setData(bundle);
 					MainActivity.this.nfchandler.sendMessage(msg);
 				}else if(data.equals("bk42-lr004")){
 					bundle.putString("id", "bk42-lr004");
 					bundle.putString("title","004");
-					bundle.putInt("cpath", R.raw.c001);
-					bundle.putInt("vpath", R.raw.r001);
+					bundle.putInt("lrcpath", R.raw.c001);
+					bundle.putInt("oggpath", R.raw.r001);
 					msg.setData(bundle);
 					MainActivity.this.nfchandler.sendMessage(msg);
 				}
@@ -100,12 +101,7 @@ public class MainActivity extends Activity {
 		if(listdata==null){
 			listdata = new ArrayList<Map<String,Object>>();
 		//增加序章数据
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("id", "bk42-lr001");
-		map.put("title","序章");
-		map.put("cpath", R.raw.l001);
-		map.put("vpath", R.raw.r001);
-		listdata.add(map);
+		listdata.add(Utils.makeListItemData("bk42-lr001", "序章", R.raw.l001, R.raw.r001));
 		
 		sa = new SimpleAdapter(this,listdata,R.layout.listitem
 				,new String[]{"title"}
@@ -119,9 +115,9 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> l, View v, int position,long id) {
 				Intent intent = new Intent(MainActivity.this,RadioActivity.class);
 				Map<String,Object> mapitem = listdata.get(position);
-				intent.putExtra("title", mapitem.get("title").toString());			//传送标题到下一个界面
-				intent.putExtra("cpath", (int)mapitem.get("cpath"));				//歌词路径 
-				intent.putExtra("vpath", vpath+((int)mapitem.get("vpath")));		//传送播放路径到下一个界面
+				intent.putExtra("title", mapitem.get("title").toString());				//传送标题到下一个界面
+				intent.putExtra("lrcpath", (int)mapitem.get("lrcpath"));				//歌词路径 
+				intent.putExtra("oggpath", vpath+((int)mapitem.get("oggpath")));		//传送播放路径到下一个界面
 				MainActivity.this.startActivity(intent);
 			}});
 		}
@@ -182,12 +178,10 @@ public class MainActivity extends Activity {
 			}
 			//增加数据
 			if(additem){
-				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("id", bundle.getString("id"));
-				map.put("title",bundle.getString("title"));
-				map.put("cpath", bundle.getString("cpath"));
-				map.put("vpath", bundle.getString("vpath"));
-				me.listdata.add(map);
+				me.listdata.add(Utils.makeListItemData(bundle.getString("id")
+						, bundle.getString("title")
+						, bundle.getInt("lrcpath")
+						, bundle.getInt("oggpath")));
 				me.sa.notifyDataSetChanged();
 			}
 		}

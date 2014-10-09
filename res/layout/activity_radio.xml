@@ -29,28 +29,26 @@
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
-        android:layout_height="232dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_videotitle" >
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <com.bsu.bakerstreet42.lrc.LrcView
                 android:id="@+id/lrc"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@android:color/white" 
-                                
+                android:background="@android:color/white"
                 lrc:currentTextColor="@android:color/holo_orange_light"
-    			lrc:normalTextColor="@android:color/black"
-    			lrc:rows="7"
-    			lrc:textSize="20sp"
-    			lrc:dividerHeight="10dip"
-                
-                >
+                lrc:dividerHeight="10dip"
+                lrc:normalTextColor="@android:color/black"
+                lrc:rows="10"
+                lrc:textSize="20sp" >
+
                 </com.bsu.bakerstreet42.lrc.LrcView>
 
             <!--
@@ -68,7 +66,7 @@
     <VideoView
         android:id="@+id/vv"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="75dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/scrollView1" />
 

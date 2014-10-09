@@ -181,23 +181,48 @@ public class LrcView extends View {
 	public synchronized void changeCurrent(long time) {
 		// 如果当前时间小于下一句开始的时间
 		// 直接return
-		if (mNextTime > time) {
-			return;
-		}
+//		if (mNextTime > time) {
+//			return;
+//		}
 
 		// 每次进来都遍历存放的时间
-		for (int i = 0; i < mTimes.size(); i++) {
-			// 发现这个时间大于传进来的时间
-			// 那么现在就应该显示这个时间前面的对应的那一行
-			// 每次都重新显示，是不是要判断：现在正在显示就不刷新了
-			if (mTimes.get(i) > time && i >= mCurrentLine + 1) {
-				System.out.println("换");
-				mNextTime = mTimes.get(i);
-				mCurrentLine = i <= 1 ? 0 : i - 1;
+//		for (int i = 0; i < mTimes.size(); i++) {
+//			// 发现这个时间大于传进来的时间
+//			// 那么现在就应该显示这个时间前面的对应的那一行
+//			// 每次都重新显示，是不是要判断：现在正在显示就不刷新了
+//			if (mTimes.get(i) > time && i >= mCurrentLine + 1) {
+//				System.out.println("换");
+//				mNextTime = mTimes.get(i);
+//				mCurrentLine = i <= 1 ? 0 : i - 1;
+//				postInvalidate();
+//				break;
+//			}
+//		}
+		
+		for(int i=0;i<mTimes.size();i++){
+			//处理第一句歌词
+			if(i!=mTimes.size()-1 && time>0 && time<mTimes.get(i+1)){
+				mCurrentLine = i;
+				postInvalidate();
+				break;
+			}
+			//处理中间歌词
+			//当当前时间大于某一时间标签，并小于下一时间标签的时间，设置当前显示的行为i
+			else if(i!=mTimes.size()-1 && time>mTimes.get(i) && time<mTimes.get(i+1)){
+				mCurrentLine=i;
+				postInvalidate();
+				break;
+			}
+			//处理最后一句歌词
+			//当当前时间为最后一个时间标签时，直接设置最后一行并跳出循环，不对下一标签时间进行比较
+			else if(i==mTimes.size()-1 ){
+				mCurrentLine = i;
 				postInvalidate();
 				break;
 			}
 		}
+		
+		
 	}
 
 	/**
