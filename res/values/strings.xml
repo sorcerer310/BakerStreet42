@@ -3,7 +3,7 @@
 
     <string name="app_name">BakerStreet42</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">重置游戏</string>
     <string name="title_activity_video">VideoActivity</string>
     <string name="title_activity_radio">RadioActivity</string>
 

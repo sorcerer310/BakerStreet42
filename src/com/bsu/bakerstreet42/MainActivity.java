@@ -10,20 +10,28 @@ import com.bsu.bakerstreet42.tools.NfcActivityHelper;
 import com.bsu.bakerstreet42.tools.Utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private NfcAdapter adapter;				//Nfc设备代理
@@ -53,6 +61,7 @@ public class MainActivity extends Activity {
 		
 		initNfcHelper();
 		initMessage();
+		initResetGameDialog();
 	}
 	/*
 	 * 初始化NfcHelper
@@ -186,4 +195,50 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		getMenuInflater().inflate(R.menu.main, menu);  
+		return super.onCreateOptionsMenu(menu);
+	}
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		 int id = item.getItemId();
+		if(id==R.id.action_settings){
+			Toast.makeText(this, "action_setting", Toast.LENGTH_SHORT).show();
+			dlg_rstgame.show();
+			return true;
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}
+	
+	private AlertDialog dlg_rstgame;
+	/**
+	 * 初始化输入密码对话框
+	 */
+	private void initResetGameDialog(){
+		final EditText et = new EditText(this);
+		et.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("请输入游戏重置密码")
+			.setIcon(android.R.drawable.ic_dialog_info)
+			.setView(et).setPositiveButton("确定", new OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int arg1) {
+					if(et.getText().toString().equals("12345"))
+						Toast.makeText(MainActivity.this, "密码正确", Toast.LENGTH_SHORT).show();
+					else
+						Toast.makeText(MainActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
+					dialog.dismiss();	
+				}})
+			.setNegativeButton("取消", null);
+
+
+		
+		dlg_rstgame = builder.create();
+	}
+	
+
 }
