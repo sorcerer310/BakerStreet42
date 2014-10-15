@@ -51,8 +51,8 @@ public class Utils {
 	 */
 	public static Map<String,Object> makeListItemData(String id,String title,int lrcp,int oggp){
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("id", "bk42-lr001");				//
-		map.put("title","序章");						//			
+		map.put("id", id);							//
+		map.put("title",title);						//			
 		map.put("lrcpath", R.raw.l001);				//
 		map.put("oggpath", R.raw.r001);				//
 //		map.put("imgpath", 0);						//表示播放声音时显示的npc的图片路径
