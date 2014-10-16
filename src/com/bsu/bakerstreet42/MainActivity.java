@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
 	//程序列表持久数据，防止玩家退出程序再进入获得的数据不对，如要重置需要在游戏重置功能操作
 	private SharedPreferences settings;
 	
+	private final String PREFERENCES_CLEAR_PASSWORD = "12345";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,9 +108,10 @@ public class MainActivity extends Activity {
 	 * @param id	对应的资源id
 	 */
 	private void makeListDataInitPreByID(String id){
-		if(settings.contains(id) && settings.getBoolean(id, false))
+		if(settings.contains(id) && settings.getBoolean(id, false)){
 			listdata.add(makeListDataByID(id));
-		else{
+//			sa.notifyDataSetChanged();
+		}else{
 			Editor editor = settings.edit();
 			editor.putBoolean(id, false);
 			editor.commit();
@@ -161,12 +163,19 @@ public class MainActivity extends Activity {
 		nfchelper.setOnNFCReadListener(new OnNfcReadListener(){
 			@Override
 			public void read(String data) {
+				if(data.equals("preferencesClear")){
+					clearPreferences();						//清理数据
+					sa.notifyDataSetChanged();				//通知控件刷新数据
+					return;
+				}
+				
 				//如果列表中包含当前的数据，则不增加该数据到列表中
 				for(Map<String,Object> map:listdata){
 					if(map.get("id").equals(data)){
 						return;
 					}
 				}
+				//根据数据id增加数据
 				if(data.equals("bk42-lr002")){
 					listdata.add(Utils.makeListItemData("bk42-lr002","002",R.raw.c001,R.raw.r001));
 					addListDataToPrefences(data);
@@ -186,47 +195,16 @@ public class MainActivity extends Activity {
 					listdata.add(Utils.makeListItemData("bk42-lr007","007",R.raw.c001,R.raw.r001));
 					addListDataToPrefences(data);
 				}
+				//通知控件刷新数据代理
 				sa.notifyDataSetChanged();						
-				
-				
-//				Bundle bundle = new Bundle();
-//				Message msg = new Message();
-//				if(data.equals("bk42-lr002")){
-//					bundle.putString("id", "bk42-lr002");
-//					bundle.putString("title","002");
-//					bundle.putInt("lrcpath", R.raw.c001);
-//					bundle.putInt("oggpath", R.raw.r001);
-//					msg.setData(bundle);
-//					MainActivity.this.nfchandler.sendMessage(msg);
-//				}else if(data.equals("bk42-lr003")){
-//					bundle.putString("id", "bk42-lr003");
-//					bundle.putString("title","003");
-//					bundle.putInt("lrcpath", R.raw.c001);
-//					bundle.putInt("oggpath", R.raw.r001);
-//					msg.setData(bundle);
-//					MainActivity.this.nfchandler.sendMessage(msg);
-//				}else if(data.equals("bk42-lr004")){
-//					bundle.putString("id", "bk42-lr004");
-//					bundle.putString("title","004");
-//					bundle.putInt("lrcpath", R.raw.c001);
-//					bundle.putInt("oggpath", R.raw.r001);
-//					msg.setData(bundle);
-//					MainActivity.this.nfchandler.sendMessage(msg);
-//				}
 			}});	
 	}
-	
-
-	
 
 	/**
 	 * 初始化收件箱消息部分
 	 */
 	private void initMessage(){
 		lv_message = (ListView) findViewById(R.id.lv_message);
-		
-		//增加序章数据
-//		listdata.add(Utils.makeListItemData("bk42-lr001", "序章", R.raw.l001, R.raw.r001));
 		
 		sa = new SimpleAdapter(this,listdata,R.layout.listitem
 				,new String[]{"title"}
@@ -278,39 +256,6 @@ public class MainActivity extends Activity {
 			return true;
 		return super.onKeyDown(keyCode, event);
 	}
-	/**
-	 * 操作nfchelper
-	 * @author fengchong
-	 *
-	 */
-//	public class NfcHelperHandler extends Handler{
-//		private MainActivity me;
-//		public NfcHelperHandler(MainActivity m){
-//			me = m;
-//		}
-//		@Override
-//		public void handleMessage(Message msg){
-//			boolean additem = true;							//默认增加数据标示为true
-//			
-//			Bundle bundle = msg.getData();					//获得handle传送过来得消息
-//			String id = bundle.getString("id");				//获得要增加的项目的id
-//			//遍历所有的list项目如果该项目已存在，设置增加数据的标识为false
-//			for(Map<String,Object> m:me.listdata){			
-//				if(m.get("id").toString().equals(id)){
-//					additem = false;
-//					break;
-//				}
-//			}
-//			//增加数据
-//			if(additem){
-//				me.listdata.add(Utils.makeListItemData(bundle.getString("id")
-//						, bundle.getString("title")
-//						, bundle.getInt("lrcpath")
-//						, bundle.getInt("oggpath")));
-//				me.sa.notifyDataSetChanged();
-//			}
-//		}
-//	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -329,6 +274,7 @@ public class MainActivity extends Activity {
 		return super.onMenuItemSelected(featureId, item);
 	}
 	
+	//对话框对象
 	private AlertDialog dlg_rstgame;
 	/**
 	 * 初始化输入密码对话框
@@ -348,13 +294,10 @@ public class MainActivity extends Activity {
 			.setPositiveButton("确定", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int arg1) {
-					if(et.getText().toString().equals("12345")){
+					if(et.getText().toString().equals(PREFERENCES_CLEAR_PASSWORD)){
 						Toast.makeText(MainActivity.this, "重置游戏成功", Toast.LENGTH_SHORT).show();
 						//密码正确则清除数据
-						Editor editor = MainActivity.this.settings.edit();
-						editor.clear();
-						editor.commit();
-						MainActivity.this.initPreferences();
+						clearPreferences();
 					}
 					else
 						Toast.makeText(MainActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
@@ -363,6 +306,14 @@ public class MainActivity extends Activity {
 			.setNeutralButton("取消", null)
 			.create();
 	}
-	
+	/**
+	 * 清除持久数据
+	 */
+	private void clearPreferences(){
+		Editor editor = MainActivity.this.settings.edit();
+		editor.clear();
+		editor.commit();
+		this.initPreferences();
+	}
 
 }
