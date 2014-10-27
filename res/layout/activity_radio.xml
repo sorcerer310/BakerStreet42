@@ -49,7 +49,7 @@
                 lrc:rows="10"
                 lrc:textSize="20sp" >
 
-                </com.bsu.bakerstreet42.lrc.LrcView>
+            </com.bsu.bakerstreet42.lrc.LrcView>
 
             <!--
                  <TextView

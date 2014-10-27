@@ -53,8 +53,8 @@ public class Utils {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("id", id);							//
 		map.put("title",title);						//			
-		map.put("lrcpath", R.raw.l001);				//
-		map.put("oggpath", R.raw.r001);				//
+		map.put("lrcpath", lrcp);				//
+		map.put("oggpath", oggp);				//
 //		map.put("imgpath", 0);						//表示播放声音时显示的npc的图片路径
 		return map;
 	}

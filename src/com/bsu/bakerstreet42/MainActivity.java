@@ -124,20 +124,21 @@ public class MainActivity extends Activity {
 	 * @return		返回该id对应的资源数据
 	 */
 	private Map<String,Object> makeListDataByID(String id){
+//		String s = R.string.nid001;
 		if(id.equals("bk42-lr001")){
-			return Utils.makeListItemData("bk42-lr001","001",R.raw.c001,R.raw.r001);
+			return Utils.makeListItemData("bk42-lr001","勇士们你们好",R.raw.l001,R.raw.r001);
 		}else if(id.equals("bk42-lr002")){
-			return Utils.makeListItemData("bk42-lr002","002",R.raw.c001,R.raw.r001);
+			return Utils.makeListItemData("bk42-lr002","米洛陶洛斯",R.raw.l002,R.raw.r002);
 		}else if(id.equals("bk42-lr003")){
-			return Utils.makeListItemData("bk42-lr003","003",R.raw.c001,R.raw.r001);
+			return Utils.makeListItemData("bk42-lr003","法拉奥",R.raw.l003,R.raw.r003);
 		}else if(id.equals("bk42-lr004")){
-			return Utils.makeListItemData("bk42-lr004", "004", R.raw.c001, R.raw.r001);
+			return Utils.makeListItemData("bk42-lr004", "阿喀琉斯", R.raw.l004, R.raw.r004);
 		}else if(id.equals("bk42-lr005")){
-			return Utils.makeListItemData("bk42-lr005", "005", R.raw.c001, R.raw.r001);
+			return Utils.makeListItemData("bk42-lr005", "塔纳托斯", R.raw.l005, R.raw.r005);
 		}else if(id.equals("bk42-lr006")){
-			return Utils.makeListItemData("bk42-lr006", "006", R.raw.c001, R.raw.r001);
+			return Utils.makeListItemData("bk42-lr006", "美杜莎", R.raw.l006, R.raw.r006);
 		}else if(id.equals("bk42-lr007")){
-			return Utils.makeListItemData("bk42-lr007", "007", R.raw.c001, R.raw.r001);
+			return Utils.makeListItemData("bk42-lr007", "奥丁", R.raw.l007, R.raw.r007);
 		}
 		return null;
 	}
@@ -177,22 +178,22 @@ public class MainActivity extends Activity {
 				}
 				//根据数据id增加数据
 				if(data.equals("bk42-lr002")){
-					listdata.add(Utils.makeListItemData("bk42-lr002","002",R.raw.c001,R.raw.r001));
+					listdata.add(Utils.makeListItemData("bk42-lr002","米洛陶洛斯",R.raw.l002,R.raw.r002));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr003")){
-					listdata.add(Utils.makeListItemData("bk42-lr003","003",R.raw.c001,R.raw.r001));
+					listdata.add(Utils.makeListItemData("bk42-lr003","法拉奥",R.raw.l003,R.raw.r003));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr004")){
-					listdata.add(Utils.makeListItemData("bk42-lr004","004",R.raw.c001,R.raw.r001));
+					listdata.add(Utils.makeListItemData("bk42-lr004","阿喀琉斯",R.raw.l004,R.raw.r004));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr005")){
-					listdata.add(Utils.makeListItemData("bk42-lr005","005",R.raw.c001,R.raw.r001));
+					listdata.add(Utils.makeListItemData("bk42-lr005","塔纳托斯",R.raw.l005,R.raw.r005));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr006")){
-					listdata.add(Utils.makeListItemData("bk42-lr006","006",R.raw.c001,R.raw.r001));
+					listdata.add(Utils.makeListItemData("bk42-lr006","美杜莎",R.raw.l006,R.raw.r006));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr007")){
-					listdata.add(Utils.makeListItemData("bk42-lr007","007",R.raw.c001,R.raw.r001));
+					listdata.add(Utils.makeListItemData("bk42-lr007","奥丁",R.raw.l007,R.raw.r007));
 					addListDataToPrefences(data);
 				}
 				//通知控件刷新数据代理
