@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -61,16 +62,13 @@ public class LrcView extends View {
 	private void initViews(AttributeSet attrs) {
 		// <begin>
 		// 解析自定义属性
-		TypedArray ta = getContext().obtainStyledAttributes(attrs,
-				R.styleable.Lrc);
-		mTextSize = ta.getDimension(R.styleable.Lrc_textSize, 50.0f);
+		TypedArray ta = getContext().obtainStyledAttributes(attrs,R.styleable.Lrc);
+//		mTextSize = ta.getDimension(R.styleable.Lrc_textSize, 50.0f);
+		mTextSize = 40;
 		mRows = ta.getInteger(R.styleable.Lrc_rows, 5);
 		mDividerHeight = ta.getDimension(R.styleable.Lrc_dividerHeight, 0.0f);
-
-		int normalTextColor = ta.getColor(R.styleable.Lrc_normalTextColor,
-				0xffffffff);
-		int currentTextColor = ta.getColor(R.styleable.Lrc_currentTextColor,
-				0xff00ffde);
+		int normalTextColor = ta.getColor(R.styleable.Lrc_normalTextColor,0xffffffff);
+		int currentTextColor = ta.getColor(R.styleable.Lrc_currentTextColor,0xff00ffde);
 		
 		ta.recycle();
 		// </end>
@@ -84,8 +82,12 @@ public class LrcView extends View {
 		// 初始化paint
 		mNormalPaint.setTextSize(mTextSize);
 		mNormalPaint.setColor(normalTextColor);
+		mNormalPaint.setTypeface(Typeface.DEFAULT_BOLD);
+//		mNormalPaint.setTypeface(Typeface.SANS_SERIF);
 		mCurrentPaint.setTextSize(mTextSize);
 		mCurrentPaint.setColor(currentTextColor);
+		mCurrentPaint.setTypeface(Typeface.DEFAULT_BOLD);
+//		mCurrentPaint.setTypeface(Typeface.SANS_SERIF);
 	}
 
 	@Override

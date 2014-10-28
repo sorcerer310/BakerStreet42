@@ -29,6 +29,7 @@ public class RadioActivity extends Activity {
 	private TextView tv_content;
 	private LrcView lrc;
 	private Button bt_back;
+	private boolean flag_lrc = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,7 +67,7 @@ public class RadioActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		flag_lrc = true;
 		vv.setOnPreparedListener(new OnPreparedListener(){
 			@Override
 			public void onPrepared(MediaPlayer arg0) {
@@ -78,7 +79,8 @@ public class RadioActivity extends Activity {
 						// 就一直调用changeCurrent方法
 						// 虽然一直调用， 但界面不会一直刷新
 						// 只有当唱到下一句时才刷新
-						while(vv.isPlaying()) {
+//						while(vv.isPlaying()) {
+						while(flag_lrc){
 							// 调用changeCurrent方法， 参数是当前播放的位置
 							// LrcView会自动判断需不需要下一行
 							RadioActivity.this.lrc.changeCurrent(vv.getCurrentPosition());
@@ -99,5 +101,23 @@ public class RadioActivity extends Activity {
 		vv.setVideoURI(Uri.parse(oggpath));
 		vv.requestFocus();
 //		vv.start();
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		flag_lrc = false;
+	}
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		flag_lrc = false;
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		flag_lrc = true;
 	}
 }

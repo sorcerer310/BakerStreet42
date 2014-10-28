@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/iv_bg"
         android:layout_alignLeft="@+id/iv_bg"
-        android:text="收件箱"
+        android:text="凯瑟琳的提示:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

@@ -220,8 +220,8 @@ public class MainActivity extends Activity {
 				Intent intent = new Intent(MainActivity.this,RadioActivity.class);
 				Map<String,Object> mapitem = listdata.get(position);
 				intent.putExtra("title", mapitem.get("title").toString());				//传送标题到下一个界面
-				intent.putExtra("lrcpath", (int)mapitem.get("lrcpath"));				//歌词路径 
-				intent.putExtra("oggpath", vpath+((int)mapitem.get("oggpath")));		//传送播放路径到下一个界面
+				intent.putExtra("lrcpath", (Integer)mapitem.get("lrcpath"));				//歌词路径 
+				intent.putExtra("oggpath", vpath+((Integer)mapitem.get("oggpath")));		//传送播放路径到下一个界面
 				MainActivity.this.startActivity(intent);
 			}});
 //		}
