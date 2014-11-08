@@ -63,9 +63,15 @@ public class RadioActivity extends Activity {
 
 		bt_back = (Button) findViewById(R.id.bt_back);
 		bt_back.setAlpha(1.0f);
+		bt_back.setEnabled(true);
 		bt_back.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
+				//设置按钮不可用
+				arg0.setEnabled(false);
+				//先停止线程
+				flag_lrc = false;
+				//转到主界面
 				Intent intent = new Intent(RadioActivity.this,MainActivity.class);
 				RadioActivity.this.startActivity(intent);
 			}
