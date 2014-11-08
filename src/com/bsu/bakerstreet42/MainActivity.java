@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import com.bsu.bakerstreet42.listener.OnNfcReadListener;
 import com.bsu.bakerstreet42.tools.NfcActivityHelper;
 import com.bsu.bakerstreet42.tools.Utils;
+import com.bsu.bakerstreet42.widget.adapter.ListViewSimpleAdapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -50,7 +51,7 @@ public class MainActivity extends Activity {
 	//列表控件
 	private ListView lv_message;
 	private List<Map<String,Object>> listdata;
-	private SimpleAdapter sa;
+	private ListViewSimpleAdapter sa;
 	
 	//视频音频资源路径
 	private String vpath;
@@ -218,7 +219,7 @@ public class MainActivity extends Activity {
 	private void initMessage(){
 		lv_message = (ListView) findViewById(R.id.lv_message);
 		
-		sa = new SimpleAdapter(this,listdata,R.layout.listitem
+		sa = new ListViewSimpleAdapter(this,listdata,R.layout.listitem
 				,new String[]{"title"}
 				,new int[]{R.id.item_title});
 		

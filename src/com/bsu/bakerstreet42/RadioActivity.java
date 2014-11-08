@@ -9,6 +9,7 @@ import com.bsu.bakerstreet42.widget.MediaControllerNoHide;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
@@ -57,6 +58,7 @@ public class RadioActivity extends Activity {
 //		mc = new MediaController(this);
 		mc = new MediaControllerNoHide(this);
 		tv = (TextView) findViewById(R.id.tv_videotitle);
+		tv.setTypeface(Typeface.createFromAsset(getAssets(), "fzzy.ttf"));
 		tv.setText(title);
 
 		bt_back = (Button) findViewById(R.id.bt_back);

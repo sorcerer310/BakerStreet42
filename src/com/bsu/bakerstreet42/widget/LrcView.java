@@ -126,7 +126,7 @@ public class LrcView extends View {
 
 		// 将画布上移
 		//5为第几行歌词变色
-		canvas.translate(0, -((mCurrentLine - 7) * (mTextSize + mDividerHeight)));
+		canvas.translate(0, -((mCurrentLine - 6) * (mTextSize + mDividerHeight)));
 
 		// 画当前行上面的
 		for (int i = mCurrentLine - 1; i >= 0; i--) {
