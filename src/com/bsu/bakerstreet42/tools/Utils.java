@@ -49,13 +49,13 @@ public class Utils {
 	 * @param oggp		表示声音文件路径
 	 * @return			返回一个Map<String,Object>类型对象
 	 */
-	public static Map<String,Object> makeListItemData(String id,String title,int lrcp,int oggp){
+	public static Map<String,Object> makeListItemData(String id,String title,int lrcp,int oggp,int imgp){
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("id", id);							//
 		map.put("title",title);						//			
 		map.put("lrcpath", lrcp);				//
 		map.put("oggpath", oggp);				//
-//		map.put("imgpath", 0);						//表示播放声音时显示的npc的图片路径
+		map.put("imgpath", imgp);						//表示播放声音时显示的npc的图片路径
 		return map;
 	}
 }

@@ -21,6 +21,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Typeface;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -53,19 +55,21 @@ public class MainActivity extends Activity {
 	//视频音频资源路径
 	private String vpath;
 	
-	//nfc帮助类Handler
-//	private NfcHelperHandler nfchandler;
-	
 	//程序列表持久数据，防止玩家退出程序再进入获得的数据不对，如要重置需要在游戏重置功能操作
 	private SharedPreferences settings;
 	
-	private final String PREFERENCES_CLEAR_PASSWORD = "12345";
+	//系统数据重置密码
+	private final String PREFERENCES_CLEAR_PASSWORD = "12345";			
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		//设置标题
+//		this.setTitle("贝克街42号－威廉古堡之狼人");
+		TextView tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title.setTypeface(Typeface.createFromAsset(getAssets(), "fzzy.ttf"));
 		
-		//初始化设备
+		//初始化ndef设备
 		adapter = NfcAdapter.getDefaultAdapter(this);
 		//截获Intent,使用当前的Activity
 		pintent = PendingIntent.getActivity(this, 0, new Intent(this,getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
@@ -73,10 +77,10 @@ public class MainActivity extends Activity {
 		if(listdata==null)
 			listdata = new ArrayList<Map<String,Object>>();
 		
-		initPreferences();
-		initNfcHelper();
-		initMessage();
-		initResetGameDialog();
+		initPreferences();						//初始化持久化数据
+		initNfcHelper();						//初始化nfc得帮助类
+		initMessage();							//初始化消息
+		initResetGameDialog();					//初始化重置数据窗口
 		
 	}
 
@@ -89,6 +93,12 @@ public class MainActivity extends Activity {
 		
 		//先初始化第一条数据
 		editor.putBoolean("bk42-lr001", true);
+		editor.putBoolean("bk42-lr002", true);
+		editor.putBoolean("bk42-lr003", true);
+		editor.putBoolean("bk42-lr004", true);
+		editor.putBoolean("bk42-lr005", true);
+		editor.putBoolean("bk42-lr006", true);
+		editor.putBoolean("bk42-lr007", true);
 		editor.commit();
 		
 		listdata.clear();
@@ -110,7 +120,6 @@ public class MainActivity extends Activity {
 	private void makeListDataInitPreByID(String id){
 		if(settings.contains(id) && settings.getBoolean(id, false)){
 			listdata.add(makeListDataByID(id));
-//			sa.notifyDataSetChanged();
 		}else{
 			Editor editor = settings.edit();
 			editor.putBoolean(id, false);
@@ -126,19 +135,19 @@ public class MainActivity extends Activity {
 	private Map<String,Object> makeListDataByID(String id){
 //		String s = R.string.nid001;
 		if(id.equals("bk42-lr001")){
-			return Utils.makeListItemData("bk42-lr001","勇士们你们好",R.raw.l001,R.raw.r001);
+			return Utils.makeListItemData("bk42-lr001","凯瑟琳公主",R.raw.l001,R.raw.r001,R.drawable.i001);
 		}else if(id.equals("bk42-lr002")){
-			return Utils.makeListItemData("bk42-lr002","米洛陶洛斯",R.raw.l002,R.raw.r002);
+			return Utils.makeListItemData("bk42-lr002","米洛陶洛斯",R.raw.l002,R.raw.r002,R.drawable.i002);
 		}else if(id.equals("bk42-lr003")){
-			return Utils.makeListItemData("bk42-lr003","法拉奥",R.raw.l003,R.raw.r003);
+			return Utils.makeListItemData("bk42-lr003","法拉奥",R.raw.l003,R.raw.r003,R.drawable.i003);
 		}else if(id.equals("bk42-lr004")){
-			return Utils.makeListItemData("bk42-lr004", "阿喀琉斯", R.raw.l004, R.raw.r004);
+			return Utils.makeListItemData("bk42-lr004", "阿喀琉斯", R.raw.l004, R.raw.r004,R.drawable.i004);
 		}else if(id.equals("bk42-lr005")){
-			return Utils.makeListItemData("bk42-lr005", "塔纳托斯", R.raw.l005, R.raw.r005);
+			return Utils.makeListItemData("bk42-lr005", "塔纳托斯", R.raw.l005, R.raw.r005,R.drawable.i005);
 		}else if(id.equals("bk42-lr006")){
-			return Utils.makeListItemData("bk42-lr006", "美杜莎", R.raw.l006, R.raw.r006);
+			return Utils.makeListItemData("bk42-lr006", "美杜莎", R.raw.l006, R.raw.r006,R.drawable.i006);
 		}else if(id.equals("bk42-lr007")){
-			return Utils.makeListItemData("bk42-lr007", "奥丁", R.raw.l007, R.raw.r007);
+			return Utils.makeListItemData("bk42-lr007", "奥丁", R.raw.l007, R.raw.r007,R.drawable.i007);
 		}
 		return null;
 	}
@@ -156,7 +165,6 @@ public class MainActivity extends Activity {
 	 * 初始化NfcHelper
 	 */
 	private void initNfcHelper(){
-//		nfchandler = new NfcHelperHandler(this);
 		//初始化nfc数据帮助类
 		nfchelper = new NfcActivityHelper(this,adapter,pintent);
 		nfchelper.onCreate();
@@ -177,23 +185,26 @@ public class MainActivity extends Activity {
 					}
 				}
 				//根据数据id增加数据
-				if(data.equals("bk42-lr002")){
-					listdata.add(Utils.makeListItemData("bk42-lr002","米洛陶洛斯",R.raw.l002,R.raw.r002));
+				if(data.equals("bk42-lr001")){
+					listdata.add(Utils.makeListItemData("bk42-lr001","凯瑟琳公主",R.raw.l001,R.raw.r001,R.drawable.i001));
+					addListDataToPrefences(data);
+				}else if(data.equals("bk42-lr002")){
+					listdata.add(Utils.makeListItemData("bk42-lr002","米洛陶洛斯",R.raw.l002,R.raw.r002,R.drawable.i002));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr003")){
-					listdata.add(Utils.makeListItemData("bk42-lr003","法拉奥",R.raw.l003,R.raw.r003));
+					listdata.add(Utils.makeListItemData("bk42-lr003","法拉奥",R.raw.l003,R.raw.r003,R.drawable.i003));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr004")){
-					listdata.add(Utils.makeListItemData("bk42-lr004","阿喀琉斯",R.raw.l004,R.raw.r004));
+					listdata.add(Utils.makeListItemData("bk42-lr004","阿喀琉斯",R.raw.l004,R.raw.r004,R.drawable.i004));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr005")){
-					listdata.add(Utils.makeListItemData("bk42-lr005","塔纳托斯",R.raw.l005,R.raw.r005));
+					listdata.add(Utils.makeListItemData("bk42-lr005","塔纳托斯",R.raw.l005,R.raw.r005,R.drawable.i005));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr006")){
-					listdata.add(Utils.makeListItemData("bk42-lr006","美杜莎",R.raw.l006,R.raw.r006));
+					listdata.add(Utils.makeListItemData("bk42-lr006","美杜莎",R.raw.l006,R.raw.r006,R.drawable.i006));
 					addListDataToPrefences(data);
 				}else if(data.equals("bk42-lr007")){
-					listdata.add(Utils.makeListItemData("bk42-lr007","奥丁",R.raw.l007,R.raw.r007));
+					listdata.add(Utils.makeListItemData("bk42-lr007","奥丁",R.raw.l007,R.raw.r007,R.drawable.i007));
 					addListDataToPrefences(data);
 				}
 				//通知控件刷新数据代理
@@ -219,9 +230,10 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> l, View v, int position,long id) {
 				Intent intent = new Intent(MainActivity.this,RadioActivity.class);
 				Map<String,Object> mapitem = listdata.get(position);
-				intent.putExtra("title", mapitem.get("title").toString());				//传送标题到下一个界面
+				intent.putExtra("title", mapitem.get("title").toString());					//传送标题到下一个界面
 				intent.putExtra("lrcpath", (Integer)mapitem.get("lrcpath"));				//歌词路径 
 				intent.putExtra("oggpath", vpath+((Integer)mapitem.get("oggpath")));		//传送播放路径到下一个界面
+				intent.putExtra("imgpath", (Integer)mapitem.get("imgpath"));				//传送背景图片到下一个界面
 				MainActivity.this.startActivity(intent);
 			}});
 //		}
@@ -229,26 +241,23 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
 		super.onNewIntent(intent);
 		nfchelper.onNewIntent(intent);
 	}
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		nfchelper.onPause();
 	}
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		nfchelper.onResume();
 	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		//解惑back键
+		//截获back键
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			return true;
 		}
@@ -260,7 +269,6 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		getMenuInflater().inflate(R.menu.main, menu);  
 		return super.onCreateOptionsMenu(menu);
 	}

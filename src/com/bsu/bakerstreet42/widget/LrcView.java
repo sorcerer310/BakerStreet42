@@ -1,4 +1,4 @@
-package com.bsu.bakerstreet42.lrc;
+package com.bsu.bakerstreet42.widget;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,21 +30,21 @@ import android.view.View;
  */
 @SuppressLint("DrawAllocation")
 public class LrcView extends View {
-	private List<String> mLrcs = new ArrayList<String>(); // 存放歌词
-	private List<Long> mTimes = new ArrayList<Long>(); // 存放时间
+	private List<String> mLrcs = new ArrayList<String>(); 	// 存放歌词
+	private List<Long> mTimes = new ArrayList<Long>(); 		// 存放时间
 
-	private long mNextTime = 0l; // 保存下一句开始的时间
+	private long mNextTime = 0l; 							// 保存下一句开始的时间
 
-	private int mViewWidth; // view的宽度
-	private int mLrcHeight; // lrc界面的高度
-	private int mRows;      // 多少行
-	private int mCurrentLine = 0; // 当前行
+	private int mViewWidth; 								// view的宽度
+	private int mLrcHeight; 								// lrc界面的高度
+	private int mRows;      								// 多少行
+	private int mCurrentLine = 0; 							// 当前行
 
-	private float mTextSize; // 字体
-	private float mDividerHeight; // 行间距
+	private float mTextSize; 								// 字体
+	private float mDividerHeight; 							// 行间距
 
-	private Paint mNormalPaint; // 常规的字体
-	private Paint mCurrentPaint; // 当前歌词的大小
+	private Paint mNormalPaint; 							// 常规的字体
+	private Paint mCurrentPaint; 							// 当前歌词的大小
 
 	private Bitmap mBackground = null;
 
@@ -65,10 +65,13 @@ public class LrcView extends View {
 		TypedArray ta = getContext().obtainStyledAttributes(attrs,R.styleable.Lrc);
 //		mTextSize = ta.getDimension(R.styleable.Lrc_textSize, 50.0f);
 		mTextSize = 40;
-		mRows = ta.getInteger(R.styleable.Lrc_rows, 5);
+//		mRows = ta.getInteger(R.styleable.Lrc_rows, 5);
+		mRows = 13;
 		mDividerHeight = ta.getDimension(R.styleable.Lrc_dividerHeight, 0.0f);
-		int normalTextColor = ta.getColor(R.styleable.Lrc_normalTextColor,0xffffffff);
-		int currentTextColor = ta.getColor(R.styleable.Lrc_currentTextColor,0xff00ffde);
+//		int normalTextColor = ta.getColor(R.styleable.Lrc_normalTextColor,0xffffffff);
+		int normalTextColor = 0xffffffff;
+//		int currentTextColor = ta.getColor(R.styleable.Lrc_currentTextColor,0xff00ffde);
+		int currentTextColor = 0xff3eb6d9;
 		
 		ta.recycle();
 		// </end>
@@ -122,7 +125,8 @@ public class LrcView extends View {
 		}
 
 		// 将画布上移
-		canvas.translate(0, -((mCurrentLine - 3) * (mTextSize + mDividerHeight)));
+		//5为第几行歌词变色
+		canvas.translate(0, -((mCurrentLine - 7) * (mTextSize + mDividerHeight)));
 
 		// 画当前行上面的
 		for (int i = mCurrentLine - 1; i >= 0; i--) {

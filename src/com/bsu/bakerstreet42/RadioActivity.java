@@ -1,58 +1,71 @@
 package com.bsu.bakerstreet42;
 
 import java.io.File;
+import java.util.Map;
 
-import com.bsu.bakerstreet42.lrc.LrcView;
-import com.bsu.bakerstreet42.tools.Utils;
+import com.bsu.bakerstreet42.widget.LrcView;
+import com.bsu.bakerstreet42.widget.MediaControllerNoHide;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources.NotFoundException;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 public class RadioActivity extends Activity {
 	private VideoView vv;
-	private MediaController mc;
+	private MediaControllerNoHide mc;
+//	private MediaController mc;
 	private TextView tv;
 	private TextView tv_content;
 	private LrcView lrc;
 	private Button bt_back;
+	private RelativeLayout rl_root;
 	private boolean flag_lrc = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_radio);
+		this.setTitle("贝克街42号－威廉古堡之狼人");
 		
 		//通过意图对象获得要显示的标题，歌词文件资源，ogg声音文件路径
 		Intent intent = this.getIntent();
 		String title = intent.getStringExtra("title");
 		int lrcpath = intent.getIntExtra("lrcpath", 0);
-		String oggpath = intent.getStringExtra("oggpath");
+		String oggpath = intent.getStringExtra("oggpath"); 
+		int imgpath = intent.getIntExtra("imgpath", 0);
+		
+		
 		Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
 		
+		rl_root = (RelativeLayout) findViewById(R.id.rl_root);
+		Resources res = this.getResources();
+		rl_root.setBackground(res.getDrawable(imgpath));
+		rl_root.setAlpha(0.9f);
+		
 		vv = (VideoView) findViewById(R.id.vv);
-		mc = new MediaController(this);
-		mc.show(0);											//让控制条一直显示
+//		mc = new MediaController(this);
+		mc = new MediaControllerNoHide(this);
 		tv = (TextView) findViewById(R.id.tv_videotitle);
 		tv.setText(title);
 
 		bt_back = (Button) findViewById(R.id.bt_back);
+		bt_back.setAlpha(1.0f);
 		bt_back.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
-				finish();
+				Intent intent = new Intent(RadioActivity.this,MainActivity.class);
+				RadioActivity.this.startActivity(intent);
 			}
 		});
 		
@@ -67,11 +80,14 @@ public class RadioActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		flag_lrc = true;
 		vv.setOnPreparedListener(new OnPreparedListener(){
 			@Override
 			public void onPrepared(MediaPlayer arg0) {
-				vv.start();
+//				vv.start();
+				if(!mc.isShown())
+					mc.show(0);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -97,10 +113,12 @@ public class RadioActivity extends Activity {
 			}});
 
 		
-		vv.setMediaController(mc);
 		vv.setVideoURI(Uri.parse(oggpath));
 		vv.requestFocus();
-//		vv.start();
+		vv.setMediaController(mc);
+		mc.show(0);
+		vv.start();
+		
 	}
 	@Override
 	protected void onDestroy() {
