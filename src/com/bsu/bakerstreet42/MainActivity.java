@@ -44,8 +44,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-	private NfcAdapter adapter;				//Nfc设备代理
-	private PendingIntent pintent;			//意图对象
 	private NfcActivityHelper nfchelper;	//帮助类
 	
 	//列表控件
@@ -54,7 +52,7 @@ public class MainActivity extends Activity {
 	private ListViewSimpleAdapter sa;
 	
 	//视频音频资源路径
-	private String vpath;
+	private String vpath = "android.resource://com.bsu.bakerstreet42/";
 	
 	//程序列表持久数据，防止玩家退出程序再进入获得的数据不对，如要重置需要在游戏重置功能操作
 	private SharedPreferences settings;
@@ -65,15 +63,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		//设置标题
 //		this.setTitle("贝克街42号－威廉古堡之狼人");
 		TextView tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setTypeface(Typeface.createFromAsset(getAssets(), "fzzy.ttf"));
 		
-		//初始化ndef设备
-		adapter = NfcAdapter.getDefaultAdapter(this);
-		//截获Intent,使用当前的Activity
-		pintent = PendingIntent.getActivity(this, 0, new Intent(this,getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		//初始化代理数据
 		if(listdata==null)
 			listdata = new ArrayList<Map<String,Object>>();
@@ -90,17 +85,17 @@ public class MainActivity extends Activity {
 	 */
 	private void initPreferences(){
 		settings = this.getSharedPreferences("ListDatas", MODE_PRIVATE);
-		Editor editor = settings.edit();
 		
-		//先初始化第一条数据
-		editor.putBoolean("bk42-lr001", true);
-		editor.putBoolean("bk42-lr002", true);
-		editor.putBoolean("bk42-lr003", true);
-		editor.putBoolean("bk42-lr004", true);
-		editor.putBoolean("bk42-lr005", true);
-		editor.putBoolean("bk42-lr006", true);
-		editor.putBoolean("bk42-lr007", true);
-		editor.commit();
+		//调试数据
+//		Editor editor = settings.edit();
+//		editor.putBoolean("bk42-lr001", true);
+//		editor.putBoolean("bk42-lr002", true);
+//		editor.putBoolean("bk42-lr003", true);
+//		editor.putBoolean("bk42-lr004", true);
+//		editor.putBoolean("bk42-lr005", true);
+//		editor.putBoolean("bk42-lr006", true);
+//		editor.putBoolean("bk42-lr007", true);
+//		editor.commit();
 		
 		listdata.clear();
 		//初始化数据并将已扫描的数据加入到列表中
@@ -167,7 +162,7 @@ public class MainActivity extends Activity {
 	 */
 	private void initNfcHelper(){
 		//初始化nfc数据帮助类
-		nfchelper = new NfcActivityHelper(this,adapter,pintent);
+		nfchelper = new NfcActivityHelper(this);
 		nfchelper.onCreate();
 		//当读取到nfc数据时的操作
 		nfchelper.setOnNFCReadListener(new OnNfcReadListener(){
@@ -182,37 +177,61 @@ public class MainActivity extends Activity {
 				//如果列表中包含当前的数据，则不增加该数据到列表中
 				for(Map<String,Object> map:listdata){
 					if(map.get("id").equals(data)){
+						startRadioActivity(map.get("title").toString(),(Integer)map.get("lrcpath"),
+								vpath+((Integer)map.get("oggpath")),(Integer)map.get("imgpath"));
 						return;
 					}
 				}
 				//根据数据id增加数据
 				if(data.equals("bk42-lr001")){
-					listdata.add(Utils.makeListItemData("bk42-lr001","凯瑟琳公主",R.raw.l001,R.raw.r001,R.drawable.i001));
-					addListDataToPrefences(data);
+					addListDataAndStartRadioActivity(data,"凯瑟琳公主",R.raw.l001,R.raw.r001,R.drawable.i001);
 				}else if(data.equals("bk42-lr002")){
-					listdata.add(Utils.makeListItemData("bk42-lr002","米洛陶洛斯",R.raw.l002,R.raw.r002,R.drawable.i002));
-					addListDataToPrefences(data);
+					addListDataAndStartRadioActivity(data,"米洛陶洛斯",R.raw.l002,R.raw.r002,R.drawable.i002);
 				}else if(data.equals("bk42-lr003")){
-					listdata.add(Utils.makeListItemData("bk42-lr003","法拉奥",R.raw.l003,R.raw.r003,R.drawable.i003));
-					addListDataToPrefences(data);
+					addListDataAndStartRadioActivity(data,"法拉奥",R.raw.l003,R.raw.r003,R.drawable.i003);
 				}else if(data.equals("bk42-lr004")){
-					listdata.add(Utils.makeListItemData("bk42-lr004","阿喀琉斯",R.raw.l004,R.raw.r004,R.drawable.i004));
-					addListDataToPrefences(data);
+					addListDataAndStartRadioActivity(data,"阿喀琉斯",R.raw.l004,R.raw.r004,R.drawable.i004);
 				}else if(data.equals("bk42-lr005")){
-					listdata.add(Utils.makeListItemData("bk42-lr005","塔纳托斯",R.raw.l005,R.raw.r005,R.drawable.i005));
-					addListDataToPrefences(data);
+					addListDataAndStartRadioActivity(data,"塔纳托斯",R.raw.l005,R.raw.r005,R.drawable.i005);
 				}else if(data.equals("bk42-lr006")){
-					listdata.add(Utils.makeListItemData("bk42-lr006","美杜莎",R.raw.l006,R.raw.r006,R.drawable.i006));
-					addListDataToPrefences(data);
+					addListDataAndStartRadioActivity(data,"美杜莎",R.raw.l006,R.raw.r006,R.drawable.i006);
 				}else if(data.equals("bk42-lr007")){
-					listdata.add(Utils.makeListItemData("bk42-lr007","奥丁",R.raw.l007,R.raw.r007,R.drawable.i007));
-					addListDataToPrefences(data);
+					addListDataAndStartRadioActivity(data,"奥丁",R.raw.l007,R.raw.r007,R.drawable.i007);
 				}
 				//通知控件刷新数据代理
 				sa.notifyDataSetChanged();						
 			}});	
 	}
-
+	/**
+	 * 增加ListView的数据并跳转到播放界面
+	 * @param id		消息的id
+	 * @param title		消息的标题
+	 * @param lid		歌词文件的id
+	 * @param rid		声音文件的id
+	 * @param iid		背景图片的id
+	 */
+	private void addListDataAndStartRadioActivity(String id,String title,int lid,int rid,int iid){
+		listdata.add(Utils.makeListItemData(id, title, lid, rid, iid));			//增加listview得代理数据
+		addListDataToPrefences(id);												//增加到持久化数据
+		startRadioActivity(title,lid,vpath+rid,iid);							//开始播放声音
+	}
+	/**
+	 * 传入必要参数，开始播放声音
+	 * @param title		声音标题
+	 * @param lid		歌词id
+	 * @param opath		声音文件路径
+	 * @param iid		背景图片id
+	 */
+	private void startRadioActivity(String title,int lid,String opath,int iid){
+		//根据当前得数据跳转到下一界面自动播放
+		Intent intent = new Intent(MainActivity.this,RadioActivity.class);
+		intent.putExtra("title", title);					//传送标题到下一个界面
+		intent.putExtra("lrcpath", lid);					//歌词路径 
+		intent.putExtra("oggpath", opath);					//传送播放路径到下一个界面
+		intent.putExtra("imgpath", iid);					//传送背景图片到下一个界面
+		MainActivity.this.startActivity(intent);		
+	}
+	
 	/**
 	 * 初始化收件箱消息部分
 	 */
@@ -224,20 +243,13 @@ public class MainActivity extends Activity {
 				,new int[]{R.id.item_title});
 		
 		lv_message.setAdapter(sa);
-		vpath = "android.resource://com.bsu.bakerstreet42/";
-		
 		lv_message.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> l, View v, int position,long id) {
-				Intent intent = new Intent(MainActivity.this,RadioActivity.class);
 				Map<String,Object> mapitem = listdata.get(position);
-				intent.putExtra("title", mapitem.get("title").toString());					//传送标题到下一个界面
-				intent.putExtra("lrcpath", (Integer)mapitem.get("lrcpath"));				//歌词路径 
-				intent.putExtra("oggpath", vpath+((Integer)mapitem.get("oggpath")));		//传送播放路径到下一个界面
-				intent.putExtra("imgpath", (Integer)mapitem.get("imgpath"));				//传送背景图片到下一个界面
-				MainActivity.this.startActivity(intent);
+				startRadioActivity(mapitem.get("title").toString(),(Integer)mapitem.get("lrcpath"),
+						vpath+((Integer)mapitem.get("oggpath")),(Integer)mapitem.get("imgpath"));
 			}});
-//		}
 	}
 	
 	@Override
@@ -296,6 +308,7 @@ public class MainActivity extends Activity {
 		
 		//获得密码编辑框
 		final EditText et = (EditText) gameResetDialogView.findViewById(R.id.et_password);
+		et.setText("");
 		
 		//定义输入密码的对话框
 		dlg_rstgame = new AlertDialog.Builder(this)

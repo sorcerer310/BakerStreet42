@@ -1,6 +1,7 @@
 package com.bsu.bakerstreet42.tools;
 
 import com.bsu.bakerstreet42.listener.OnNfcReadListener;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -15,12 +16,14 @@ public class NfcActivityHelper {
 	private Activity activity;				//要操作的Activity
 	private NfcAdapter adapter;				//Nfc设备代理
 	private PendingIntent pintent;			//意图对象
-	private OnNfcReadListener listener;	//读取操作的监听器
+	private OnNfcReadListener listener;		//读取操作的监听器
 
-	public NfcActivityHelper(Activity a,NfcAdapter nfca,PendingIntent pi){
+	public NfcActivityHelper(Activity a){
 		activity = a;
-		adapter = nfca;
-		pintent = pi;
+		//初始化ndef设备
+		adapter = NfcAdapter.getDefaultAdapter(activity);
+		//截获Intent,使用当前的Activity
+		pintent = PendingIntent.getActivity(activity, 0, new Intent(activity,activity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 	}
 	
 	/**
